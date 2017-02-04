@@ -1,2 +1,3 @@
-# intro-node-mongodb
-Introduccion desarrollo node y mongo
+# api-rest
+
+api rest de prueba desarrollada con mongodb y nodejs
