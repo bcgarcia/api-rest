@@ -1,19 +1,19 @@
 'use strict'
 
-const monngose = export('mongoose')
+const mongoose = require('mongoose')
 
-const schema = mongoose.Schema
+const Schema = mongoose.Schema
 
-const bcrypt = export('bcrypt-nodejs')
+const bcrypt = require('bcrypt-nodejs')
 
-const crypto = export ('crypto')
+const crypto = require ('crypto')
 
 const userSchema = Schema({
 
   email       : {type:String, unique:true,lowercase:true},
-  displayName : type:String,
+  displayName : String,
   avatar      : String,
-  password    :{type:String, select:false},
+  password    : {type:String, select:false},
   signupdate  : {type:Date, default: Date.now() },
   lastLogin   : Date,
 })
@@ -30,25 +30,22 @@ BASE DE DATOS
 // pre nos permite ejecutar una funcion antes de realizar una accion en la base de datos en este caso antes de guardar
 
 
-userSchema.pre('save',(next)=>{
+userSchema.pre('save',function(next){
 
     let user = this;
     // solo encryptamos la pass si ha sido modificada o es nueva
-    if(!this.isModified('password')) return next() // queremos que la funcion termie y pase al siguiente middleware
+    if(!this.isModified('password')) return next()
+
     bcrypt.genSalt(10, (err,salt)=>{
 
       if(err) return next(err)
 
-      bcrypt.hash(this.password,salt,null, (err,hash)=>{
-
+      bcrypt.hash( this.password , salt , null , ( err , hash ) => {
         if(err) return next(err)
-
         this.password = hash
-
         next()
-
       })
-    } ) // llamamos a bcrypt para encryptar
+    }) // llamamos a bcrypt para encryptar
 })
 
 
